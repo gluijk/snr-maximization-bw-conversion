@@ -1,31 +1,31 @@
-# Combinaci髇 髉tima de se馻les para minimizar ruido con R (II). Aplicaci髇
-# www.datosimagensonido.com
+# Combinaci贸n 贸ptima de se帽ales para minimizar ruido con R (II). Aplicaci贸n
+# www.overfitting.net
 
-# Extracci髇 RAW con DCRAW (combinaci髇 髉tima): dcraw -v -r 1 1 1 1 -o 0 -4 -T *.DNG
+# Extracci贸n RAW con DCRAW (combinaci贸n 贸ptima): dcraw -v -r 1 1 1 1 -o 0 -4 -T *.DNG
 # Revelado lineal con DCRAW (BN en Photoshop): dcraw -v -w -o 2 -4 -T *.DNG
 
-# Librer韆 im醙enes en 16 bits
+# Librer铆a im谩genes en 16 bits
 library(tiff)
-Gamma=2.2 # Curva Gamma para deslinealizar im醙enes de salida
+Gamma=2.2 # Curva Gamma para deslinealizar im谩genes de salida
 
-# Leemos extracci髇 RAW y versi髇 con desenfoque gaussiano
+# Leemos extracci贸n RAW y versi贸n con desenfoque gaussiano
 origen=readTIFF("iso12800.tiff", native=F, convert=F)
 blurred=readTIFF("iso12800blurred.tif", native=F, convert=F)
 
-# Estimaci髇 de diferencias de relaci髇 S/N
-# (k y kp son matrices pues se calculan para cada p韝el)
+# Estimaci贸n de diferencias de relaci贸n S/N
+# (k y kp son matrices pues se calculan para cada p铆xel)
 k= blurred[,,2]/blurred[,,1] # k =SNR2/SNR1=SNR_G/SNR_R
 kp=blurred[,,3]/blurred[,,1] # kp=SNR3/SNR1=SNR_B/SNR_R
 
-# Mapa para la combinaci髇 髉tima
+# Mapa para la combinaci贸n 贸ptima
 # mapa[x,y,1]+mapa[x,y,2]+mapa[x,y,3]=1 para todo (x,y)
 mapa=array(0,dim(origen))
-mapa[,,1]=1/(1+k^2+kp^2) # Mapa de pesos 髉timos para R
-mapa[,,2]=mapa[,,1]*k^2  # Mapa de pesos 髉timos para G
-mapa[,,3]=mapa[,,1]*kp^2 # Mapa de pesos 髉timos para B
+mapa[,,1]=1/(1+k^2+kp^2) # Mapa de pesos 贸ptimos para R
+mapa[,,2]=mapa[,,1]*k^2  # Mapa de pesos 贸ptimos para G
+mapa[,,3]=mapa[,,1]*kp^2 # Mapa de pesos 贸ptimos para B
 writeTIFF(mapa^(1/Gamma), "mapa.tif", bits.per.sample=16, compression="LZW")
 
-# Calculamos matricialmente combinaci髇 髉tima
+# Calculamos matricialmente combinaci贸n 贸ptima
 Yopt=mapa*origen
 writeTIFF((Yopt[,,1]+Yopt[,,2]+Yopt[,,3])^(1/Gamma), "yopt.tif",
     bits.per.sample=16, compression="LZW")
