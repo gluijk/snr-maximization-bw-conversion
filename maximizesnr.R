@@ -1,28 +1,28 @@
-# Combinaci髇 髉tima de se馻les para minimizar ruido con R (I). Teor韆
-# www.datosimagensonido.com
+# Combinaci贸n 贸ptima de se帽ales para minimizar ruido con R (I). Teor铆a
+# www.overfitting.net
 
-# Tama駉 de muestras
+# Tama帽o de muestras
 LADOIMG=1000
 LARGO=LADOIMG^2
-RESOL=61L # N鷐ero de valores de alpha
+RESOL=61L # N煤mero de valores de alpha
 
 # Diferencia de ruido
-SD1=0.14 # El ruido es la desviaci髇 t韕ica
-SD2=SD1/(5/3) # Establecemos que la se馻l 2 tenga menos ruido
+SD1=0.14 # El ruido es la desviaci贸n t铆pica
+SD2=SD1/(5/3) # Establecemos que la se帽al 2 tenga menos ruido
 
-# Se馻l 1
+# Se帽al 1
 S1=array(0.5, dim=LARGO)
 N1=rnorm(LARGO, mean=0, sd=SD1)
 X1=S1+N1
 
-# Se馻l 2
+# Se帽al 2
 S2=S1
 N2=rnorm(LARGO, mean=0, sd=SD2)
 X2=S2+N2
 
-# Combinaci髇 髉tima y mejoras te髍icas de relaci髇 S/N
-k=var(X1)^0.5/var(X2)^0.5 # Estimaci髇 de N2/N1=SD2/SD1=SNR2/SNR1
-alphaopt=1/(k^2+1) # alpha que maximiza la S/N de la combinaci髇
+# Combinaci贸n 贸ptima y mejoras te贸ricas de relaci贸n S/N
+k=var(X1)^0.5/var(X2)^0.5 # Estimaci贸n de N2/N1=SD2/SD1=SNR2/SNR1
+alphaopt=1/(k^2+1) # alpha que maximiza la S/N de la combinaci贸n
 mejoraN1=(k^2+1)^0.5
 mejoraN2=(1/k^2+1)^0.5
 
@@ -36,7 +36,7 @@ varianza=alpha
 for (i in 1:RESOL) varianza[i]=var(y[i,])
 
 plot(alpha, varianza, ylim=c(0,max(var(X1),var(X2))), type='l',
-     main='Ruido en funci髇 de alpha')
+     main='Ruido en funci贸n de alpha')
 abline(v=alphaopt, col='red', lty = 'dotted')
 abline(h=var(Yopt), col='red', lty = 'dotted')
 abline(v=0.5, col='blue', lty = 'dotted') # Y=(X1+X2)/2
@@ -55,7 +55,7 @@ print(paste0("SNRopt/SNR1=", round(SNRopt/SNR1, digits=4),
 print(paste0("SNRopt/SNR2=", round(SNRopt/SNR2, digits=4),
              " vs mejoraN2=", round(mejoraN2,4)))
 
-# Dibujamos un trozo de las se馻les y la combinaci髇 髉tima
+# Dibujamos un trozo de las se帽ales y la combinaci贸n 贸ptima
 xaxis=seq(from=0, to=1, len=1000)
 plot(xaxis, X1[1:1000], ylim=c(0,1), type='l', col='blue', ylab='X1')
 plot(xaxis, X2[1:1000], ylim=c(0,1), type='l', col='blue', ylab='X2')
@@ -66,7 +66,7 @@ hist(X1, breaks=200, xlim=0:1, ylim=c(0,30000), col='blue', border='blue')
 hist(X2, breaks=200, xlim=0:1, ylim=c(0,30000), col='lightblue', border='lightblue')
 hist(Yopt, breaks=200, xlim=0:1, ylim=c(0,30000), col='red', border='red')
 
-# Truncamos posibles outliers para construir im醙enes
+# Truncamos posibles outliers para construir im谩genes
 X1[X1 < 0] <- 0
 X2[X2 < 0] <- 0
 Yopt[Yopt < 0] <- 0
@@ -75,12 +75,12 @@ X1[X1 > 1] <- 1
 X2[X2 > 1] <- 1
 Yopt[Yopt > 1] <- 1
 
-# Convertimos vectores en im醙enes (genial R!)
+# Convertimos vectores en im谩genes (genial R!)
 dim(X1) <- c(LADOIMG, LADOIMG)
 dim(X2) <- c(LADOIMG, LADOIMG)
 dim(Yopt) <- c(LADOIMG, LADOIMG)
 
-# Guardamos como im醙enes
+# Guardamos como im谩genes
 library(tiff)
 writeTIFF(X1,   "img1.tif",   bits.per.sample=16, compression="LZW")
 writeTIFF(X2,   "img2.tif",   bits.per.sample=16, compression="LZW")
