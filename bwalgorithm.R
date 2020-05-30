@@ -1,5 +1,6 @@
 # Combinación óptima de señales para minimizar ruido con R (II). Aplicación
 # www.overfitting.net
+# https://www.overfitting.net/2017/04/combinacion-optima-de-senales-para_9.html
 
 # Extracción RAW con DCRAW (combinación óptima): dcraw -v -r 1 1 1 1 -o 0 -4 -T *.DNG
 # Revelado lineal con DCRAW (BN en Photoshop): dcraw -v -w -o 2 -4 -T *.DNG
