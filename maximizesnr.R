@@ -1,5 +1,6 @@
 # Combinación óptima de señales para minimizar ruido con R (I). Teoría
 # www.overfitting.net
+# https://www.overfitting.net/2017/04/combinacion-optima-de-senales-para.html
 
 # Tamaño de muestras
 LADOIMG=1000
